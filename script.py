@@ -1,15 +1,27 @@
 # importing required modules into main script
 
 import functions
+import student
 
-# for i in range(0,2):
-#     print('Add Student')
-#     functions.add_student()
-# # print('Add faculty')
-# # functions.add_faculty()
-
+# for i in range(0, 1):
+# print('Add Book')
+# functions.add_book()
+print('Add Student')
+functions.add_student()
+#     print('Add faculty')
+#     functions.add_faculty()
 # print('Printing student details')
 # functions.print_student_details()
+
+# print('Faculty Details...')
+# functions.print_faculty_details()
+
+# print('Book details..')
+# functions.print_book_details()
+
+# for st in student.student_list:
+#     print(st.name)
+#     print(st.roll_no)
 
 
 # Faculty.add_student()
