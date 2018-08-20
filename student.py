@@ -23,5 +23,9 @@ class StudentClass:
         self.admn_id_no = admn_id_no
         # Creating roll no string using variables that will be taken as input from users
         self.roll_no = self.year_of_admn + 'U' + StudentClass.branch_roll_mapping[self.branch] + self.admn_id_no
+        # initialising details of books issued to student when student is created
+        self.num_books_issued = 0
+        self.books_issued = []
+
 
 
