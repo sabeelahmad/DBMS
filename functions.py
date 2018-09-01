@@ -489,6 +489,17 @@ def return_book_facutly():
     print('Employee ID Not Found.')
 
 
+def return_book_student():
+    # ask for roll no
+    # if present
+        # ask for book isbn
+        # check if it was issued to this roll no at all or not
+            # since book was issued, take date from system
+            # calc fine
+            # book returned => modify student details and modify book details
+        # else exit
+    # else exit
+
 # search book functions - minor
 # return book by student
 
