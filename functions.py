@@ -7,6 +7,58 @@ import pickle
 import datetime
 
 
+def modify_faculty_on_return(book_isbn, emp_id):
+    # load faculty data
+    curr_emps = []
+
+    with open('faculty_data.pkl', 'rb') as fi_fac:
+        while True:
+            try:
+                curr_emps.append(pickle.load(fi_fac))
+            except EOFError:
+                break
+
+    # modification
+    nc = 0
+    for e in curr_emps:
+        if e.eid == emp_id:
+            for bk in e.books_issued:
+                if bk['isbn'] == book_isbn:
+                    nc = bk['nc']
+                    e.books_issued.remove(bk)
+
+    # dump modified data => not sure if this will work or not
+    for i in range(0, len(curr_emps)):
+        if i == 0:
+            with open('faculty_data.pkl', 'wb') as f:
+                pickle.dump(curr_emps[i], f)
+        else:
+            with open('faculty_data.pkl', 'rb') as f:
+                pickle.dump(curr_emps[i], f)
+
+    return nc
+
+
+def issued_faculty(book_isbn, emp_id):
+    # load faculty data
+    curr_emps = []
+
+    with open('faculty_data.pkl', 'rb') as fi_fac:
+        while True:
+            try:
+                curr_emps.append(pickle.load(fi_fac))
+            except EOFError:
+                break
+
+    # search for isbn in loaded data
+    for emp in curr_emps:
+        if emp.eid == emp_id:
+            for bk in emp.books_issued:
+                if bk['isbn'] == book_isbn:
+                    return True
+    return False
+
+
 def check_avail_faculty(isbn, cp):
     # Load book data --> pls someone convert all the loadings to a function
     # don't curse me for shitty not dry code
@@ -47,11 +99,11 @@ def modify_faculty(emp_id, issued):
             with open('faculty_data.pkl', 'wb') as fi_fac:
                 pickle.dump(curr_emps[j], fi_fac)
         else:
-            with open('facutly_data.pkl', 'ab') as fi_fac:
+            with open('faculty_data.pkl', 'ab') as fi_fac:
                 pickle.dump(curr_emps[j], fi_fac)
 
 
-def modify_book(isbn, num_copies=1):
+def modify_book(isbn, num_copies=1, mode=0):
     # load data
     # num_copies has a default value of 1 for students
     get_books = []
@@ -63,9 +115,12 @@ def modify_book(isbn, num_copies=1):
                 break
     # modify data
     for i in range(0, len(get_books)):
-        if get_books[i].isbn == isbn:
+        if get_books[i].isbn == isbn and mode == 0:
             get_books[i].num_copies -= num_copies
             break
+        if get_books[i].isbn == isbn and mode == 1:
+            get_books[i].num_copies += num_copies
+
     # rewrite data
     for j in range(0, len(get_books)):
         if j == 0:
@@ -328,6 +383,10 @@ def print_faculty_details():
     for fc in faculty_details:
         print('Faculty Name : ' + fc.ename)
         print('Faculty ID : ' + fc.eid)
+        for bk in fc.books_issued:
+            print(f"Book ISBN : {bk['isbn']}")
+            print(f"Date Of Issue : {bk['doi']}")
+            print(f"{bk['nc']} copies of book having ISBN {bk['isbn']}")
 
 
 def print_book_details():
@@ -395,7 +454,8 @@ def issue_book_facutly():
             # Now just issue book to faculty
             issue_obj = {
                 'isbn': book_isbn,
-                'doi' : datetime.datetime.now()   # stores current date in doi => date_of_issue
+                'doi': datetime.datetime.now(),   # stores current date in doi => date_of_issue
+                'nc': num_copies
             }
             # add book to faculty data
             modify_faculty(emp_id, issue_obj)
@@ -408,9 +468,29 @@ def issue_book_facutly():
     else:
         print(f'Employee with {emp_id} not present. Cannot issue book.')
 
+
+def return_book_facutly():
+    # ask for eid
+    emp_id = input('Enter Faculty ID: ')
+    # if eid present
+    if check_if_eid_present(emp_id):
+        # ask for book isbn to be returned
+        book_isbn = int(input('Enter Book ISBN to be Returned: '))
+        # check if isbn issued to faculty
+        if issued_faculty(book_isbn, emp_id):
+            # since isbn present, return book
+            # modify faculty details on return (new func)
+            num_copies = modify_faculty_on_return(book_isbn, emp_id)
+            # modify book details on return (would require new func)
+            modify_book(book_isbn, num_copies, 1)
+        # else exit func
+        print(f'This Book Was Not Issued To Employee With ID {emp_id}.')
+    # eid not present exit func
+    print('Employee ID Not Found.')
+
+
 # search book functions - minor
 # return book by student
-# return book by faculty
 
 # fine calculation
 
