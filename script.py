@@ -20,31 +20,33 @@ def show_menu():
 
 
 def get_choice():
-    return int(input('Enter the choice(1-8) of operation you want to perform: '))
+    return int(input('Enter the choice(1-8) of operation you want to perform OR Press -1 to exit: '))
 
 
 def main():
     show_menu()
     choice = get_choice()
 
-    if choice == 1:
-        add_student()
-    elif choice == 2:
-        add_faculty()
-    elif choice == 3:
-        add_book()
-    elif choice == 4:
-        issue_book_student()
-    elif choice == 5:
-        issue_book_facutly()
-    elif choice == 6:
-        return_book_student()
-    elif choice == 7:
-        return_book_facutly()
-    elif choice == 8:
-        pass
-    else:
-        print('Invalid Choice, Exiting.')
+    while choice != -1:
+        if choice == 1:
+            add_student()
+        elif choice == 2:
+            add_faculty()
+        elif choice == 3:
+            add_book()
+        elif choice == 4:
+            issue_book_student()
+        elif choice == 5:
+            issue_book_facutly()
+        elif choice == 6:
+            return_book_student()
+        elif choice == 7:
+            return_book_facutly()
+        elif choice == 8:
+            pass
+        else:
+            print('Invalid Choice, Enter Choice Again.')
+        choice = get_choice()
 
 
 if __name__ == "__main__":
