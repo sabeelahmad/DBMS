@@ -465,3 +465,7 @@ def return_book_student():
     else:
         print('Student not present in database. Error.')
 
+
+def archive():
+    # function archives all students who have passed out
+    pass
