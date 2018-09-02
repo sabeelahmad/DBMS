@@ -1,4 +1,5 @@
-from functions import add_book, add_faculty, add_student, issue_book_facutly, issue_book_student, return_book_facutly, return_book_student
+from functions import add_book, add_faculty, add_student, issue_book_facutly, issue_book_student, return_book_facutly, \
+    return_book_student, print_student_details, print_faculty_details
 
 
 def show_menu():
@@ -47,6 +48,8 @@ def main():
         else:
             print('Invalid Choice, Enter Choice Again.')
         choice = get_choice()
+    print_student_details()
+    print_faculty_details()
 
 
 if __name__ == "__main__":

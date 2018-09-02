@@ -43,7 +43,6 @@ def load_books():
     return get_books
 
 
-
 def modify_std_on_return(book_isbn, roll):
     # load student data
     curr_students = []
@@ -256,13 +255,10 @@ def add_faculty():
     if check_if_eid_present(eid):
         print('Faculty with this eid already exists. Cannot add Faculty.')
         return
-
     # create faculty using constructor
     f = faculty.FacultyClass(ename, eid)
-
     # add created faculty to list
     faculty.faculty_list.append(f)
-
     with open('faculty_data.pkl', 'ab') as fi_fac:
         # dumping data into file
         pickle.dump(f, fi_fac)
@@ -270,7 +266,6 @@ def add_faculty():
 
 def add_student():
     # input returns a string by default
-
     branch_roll_mapping = {
         'COE': 'CO',
         'IT': 'IT',
@@ -280,30 +275,25 @@ def add_student():
         'ME': 'ME',
         'BT': 'BT'
     }
-
     name = input('Enter name of Student: ')
     year_of_admn = input('Enter Year of Admission of Student: ')
     branch = input('Enter branch of student: ')
     admn_id_no = input('Enter Admission ID: ')
-    std_roll = year_of_admn + 'U' + branch_roll_mapping[branch] + year_of_admn
+    std_roll = year_of_admn + 'U' + branch_roll_mapping[branch] + admn_id_no
     if std_present(std_roll):
-        print('A student with the same details already entered. Cannot Add Student.')
-        return
-
-    # Now creating student using all the details that the user will enter
-    s = student.StudentClass(name, year_of_admn, branch, admn_id_no)
-
-    # add created student to list
-    student.student_list.append(s)
-    with open('student_data.pkl', 'ab') as fi_std:
-
-        # dumping data
-        pickle.dump(s, fi_std)
+        print('A student with the same details already exists. Cannot Add Student.')
+    else:
+        # Now creating student using all the details that the user will enter
+        s = student.StudentClass(name, year_of_admn, branch, admn_id_no)
+        # add created student to list
+        student.student_list.append(s)
+        with open('student_data.pkl', 'ab') as fi_std:
+            # dumping data
+            pickle.dump(s, fi_std)
 
 
 def add_book():
     # ask for parameters of a book from user
-
     title = input('Enter Book Title: ')
     author = input('Enter Name of Author: ')
     isbn = int(input('Enter Book ISBN: '))
