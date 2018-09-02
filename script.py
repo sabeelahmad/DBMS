@@ -1,14 +1,53 @@
-# EMPTY
+from functions import add_book, add_faculty, add_student, issue_book_facutly, issue_book_student, return_book_facutly, return_book_student
 
-import functions
 
-# functions.print_book_details()
-# functions.add_faculty()
-# functions.issue_book_facutly()
-# functions.print_faculty_details()
-# functions.return_book_facutly()
-# functions.print_book_details()
-# functions.add_student()
-# functions.issue_book_student()
-# functions.return_book_student()
-# functions.print_student_details()
+def show_menu():
+    print('-'*37)
+    print('Welcome To Library Management System')
+    print('-'*37)
+    print('\n')
+    print('-'*35)
+    print('Library Main Menu')
+    print('1. Add a student member to library.')
+    print('2. Add a faculty member to library.')
+    print('3. Add a book to library.')
+    print('4. Issue book to student.')
+    print('5. Issue book to faculty')
+    print('6. Return book by student')
+    print('7. Return book by faculty')
+    print('8. Search for a book in library.')
+    print('-'*35)
+
+
+def get_choice():
+    return int(input('Enter the choice(1-8) of operation you want to perform: '))
+
+
+def main():
+    show_menu()
+    choice = get_choice()
+
+    if choice == 1:
+        add_student()
+    elif choice == 2:
+        add_faculty()
+    elif choice == 3:
+        add_book()
+    elif choice == 4:
+        issue_book_student()
+    elif choice == 5:
+        issue_book_facutly()
+    elif choice == 6:
+        return_book_student()
+    elif choice == 7:
+        return_book_facutly()
+    elif choice == 8:
+        pass
+    else:
+        print('Invalid Choice, Exiting.')
+
+
+if __name__ == "__main__":
+    main()
+
+

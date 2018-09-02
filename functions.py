@@ -7,6 +7,43 @@ import pickle
 import datetime
 
 
+def load_student():
+    # load student data
+    curr_students = []
+    with open('student_data.pkl', 'rb') as f:
+        while True:
+            try:
+                curr_students.append(pickle.load(f))
+            except EOFError:
+                break
+    return curr_students
+
+
+def load_faculty():
+    # load faculty data
+    curr_emps = []
+    with open('faculty_data.pkl', 'rb') as fi_fac:
+        while True:
+            try:
+                curr_emps.append(pickle.load(fi_fac))
+            except EOFError:
+                break
+    return curr_emps
+
+
+def load_books():
+    # load books data
+    get_books = []
+    with open('books_data.pkl', 'rb') as fi_bk:
+        while True:
+            try:
+                get_books.append(pickle.load(fi_bk))
+            except EOFError:
+                break
+    return get_books
+
+
+
 def modify_std_on_return(book_isbn, roll):
     # load student data
     curr_students = []
@@ -36,15 +73,7 @@ def modify_std_on_return(book_isbn, roll):
 
 
 def calc_fine(roll, book_isbn):
-    # load std data
-    curr_students = []
-    with open('student_data.pkl', 'rb') as f:
-        while True:
-            try:
-                curr_students.append(pickle.load(f))
-            except EOFError:
-                break
-
+    curr_students = load_student()
     # search for student with given roll and issued isbn
     dor = 0
     doi = 0
@@ -68,15 +97,7 @@ def calc_fine(roll, book_isbn):
 
 def modify_faculty_on_return(book_isbn, emp_id):
     # load faculty data
-    curr_emps = []
-
-    with open('faculty_data.pkl', 'rb') as fi_fac:
-        while True:
-            try:
-                curr_emps.append(pickle.load(fi_fac))
-            except EOFError:
-                break
-
+    curr_emps = load_faculty()
     # modification
     nc = 0
     for e in curr_emps:
@@ -99,16 +120,7 @@ def modify_faculty_on_return(book_isbn, emp_id):
 
 
 def issued_faculty(book_isbn, emp_id):
-    # load faculty data
-    curr_emps = []
-
-    with open('faculty_data.pkl', 'rb') as fi_fac:
-        while True:
-            try:
-                curr_emps.append(pickle.load(fi_fac))
-            except EOFError:
-                break
-
+    curr_emps = load_faculty()
     # search for isbn in loaded data
     for emp in curr_emps:
         if emp.eid == emp_id:
@@ -119,16 +131,7 @@ def issued_faculty(book_isbn, emp_id):
 
 
 def check_avail_faculty(isbn, cp):
-    # Load book data --> pls someone convert all the loadings to a function
-    # don't curse me for shitty not dry code
-    # ok cool bye
-    get_books = []
-    with open('books_data.pkl', 'rb') as fi_bk:
-        while True:
-            try:
-                get_books.append(pickle.load(fi_bk))
-            except EOFError:
-                break
+    get_books = load_books()
     for bk in get_books:
         if bk.isbn == isbn and bk.num_copies >= cp:
             return True
@@ -136,22 +139,12 @@ def check_avail_faculty(isbn, cp):
 
 
 def modify_faculty(emp_id, issued):
-    # load faculty data
-    curr_emps = []
-
-    with open('faculty_data.pkl', 'rb') as fi_fac:
-        while True:
-            try:
-                curr_emps.append(pickle.load(fi_fac))
-            except EOFError:
-                break
-
+    curr_emps = load_faculty()
     # modify faculty with emp_id
     for fac in curr_emps:
         if fac.eid == emp_id:
             fac.books_issued.append(issued)
             break
-
     # dump updated data to faculty pkl file
     for j in range(0, len(curr_emps)):
         if j == 0:
@@ -165,13 +158,7 @@ def modify_faculty(emp_id, issued):
 def modify_book(isbn, num_copies=1, mode=0):
     # load data
     # num_copies has a default value of 1 for students
-    get_books = []
-    with open('books_data.pkl', 'rb') as fi_bk:
-        while True:
-            try:
-                get_books.append(pickle.load(fi_bk))
-            except EOFError:
-                break
+    get_books = load_books()
     # modify data
     for i in range(0, len(get_books)):
         if get_books[i].isbn == isbn and mode == 0:
@@ -191,13 +178,7 @@ def modify_book(isbn, num_copies=1, mode=0):
 
 
 def check_if_already_issued_to_student(isbn, std_roll):
-    curr_students = []
-    with open('student_data.pkl', 'rb') as f:
-        while True:
-            try:
-                curr_students.append(pickle.load(f))
-            except EOFError:
-                break
+    curr_students = load_student()
     for std in curr_students:
         if std.roll_no == std_roll:
             for bk in std.books_issued:
@@ -207,14 +188,7 @@ def check_if_already_issued_to_student(isbn, std_roll):
 
 
 def modify_student(std_roll, bk_issued):
-    # load students
-    curr_students = []
-    with open('student_data.pkl', 'rb') as f:
-        while True:
-            try:
-                curr_students.append(pickle.load(f))
-            except EOFError:
-                break
+    curr_students = load_student()
     # modify student with given roll no
     for std in curr_students:
         if std.roll_no == std_roll:
@@ -232,13 +206,7 @@ def modify_student(std_roll, bk_issued):
 
 def check_available(isbn, std_roll):
     # load book data from file
-    curr_data_books = []
-    with open('books_data.pkl', 'rb') as fi_bk:
-        while True:
-            try:
-                curr_data_books.append(pickle.load(fi_bk))
-            except EOFError:
-                break
+    curr_data_books = load_books()
     for bk in curr_data_books:
         if bk.isbn == isbn and bk.num_copies > 0:
             return check_if_already_issued_to_student(bk.isbn, std_roll)
@@ -246,13 +214,7 @@ def check_available(isbn, std_roll):
 
 
 def check_std_limit(std_roll):
-    curr_students = []
-    with open('student_data.pkl', 'rb') as f:
-        while True:
-            try:
-                curr_students.append(pickle.load(f))
-            except EOFError:
-                break
+    curr_students = load_student()
     for std in curr_students:
         if std.roll_no == std_roll and std.num_books_issued <= 4:
             return True
@@ -260,15 +222,7 @@ def check_std_limit(std_roll):
 
 
 def check_if_isbn_present(isbn):
-
-    curr_data_books = []
-    with open('books_data.pkl', 'rb') as fi_bk:
-        while True:
-            try:
-                curr_data_books.append(pickle.load(fi_bk))
-            except EOFError:
-                break
-
+    curr_data_books = load_books()
     for bk in curr_data_books:
         if bk.isbn == isbn:
             return True
@@ -276,16 +230,7 @@ def check_if_isbn_present(isbn):
 
 
 def check_if_eid_present(eid):
-
-    curr_emps = []
-
-    with open('faculty_data.pkl', 'rb') as fi_fac:
-        while True:
-            try:
-                curr_emps.append(pickle.load(fi_fac))
-            except EOFError:
-                break
-
+    curr_emps = load_faculty()
     for emp in curr_emps:
         if emp.eid == eid:
             return True
@@ -297,15 +242,7 @@ def verify_authentication(eid):
 
 
 def std_present(std_roll):
-
-    curr_students = []
-    with open('student_data.pkl', 'rb') as f:
-        while True:
-            try:
-                curr_students.append(pickle.load(f))
-            except EOFError:
-                break
-
+    curr_students = load_student()
     for std in curr_students:
         if std.roll_no == std_roll:
             return True
@@ -373,20 +310,13 @@ def add_book():
     num_copies_to_add = int(input('Enter number of copies of this book to be added: '))
     if check_if_isbn_present(isbn):
         print('Book with same ISBN and title already exists, Book details have been updated')
-        get_books = []
-        with open('books_data.pkl', 'rb') as fi_bk:
-            while True:
-                try:
-                    get_books.append(pickle.load(fi_bk))
-                except EOFError:
-                    break
+        get_books = load_books()
         for i in range(0, len(get_books)):
             if get_books[i].isbn == isbn:
                 cp = get_books[i].num_copies
                 get_books.pop(i)
                 bk_new = book.BookClass(title, author, isbn, num_copies_to_add + cp)
                 book.book_list.append(bk_new)
-
             for j in range(0, len(book.book_list)):
                 if j == 0:
                     with open('books_data.pkl', 'wb') as fi_bk:
@@ -394,14 +324,11 @@ def add_book():
                 else:
                     with open('books_data.pkl', 'ab') as fi_bk:
                         pickle.dump(book.book_list[j], fi_bk)
-
     else:
         # calling book constructor
         bk_new = book.BookClass(title, author, isbn, num_copies_to_add)
-
         #  add new book to list of books
         book.book_list.append(bk_new)
-
         # pickle book
         with open('books_data.pkl', 'ab') as fi_bk:
 
@@ -413,14 +340,7 @@ def add_book():
 
 def print_student_details():
 
-    student_details = []
-    with open('student_data.pkl', 'rb') as f:
-        while True:
-            try:
-                student_details.append(pickle.load(f))
-            except EOFError:
-                break
-
+    student_details = load_student()
     for st in student_details:
         print('Name : ' + st.name)
         print('Roll No :' + st.roll_no)
@@ -431,14 +351,7 @@ def print_student_details():
 
 
 def print_faculty_details():
-
-    faculty_details = []
-    with open('faculty_data.pkl', 'rb') as fi_fac:
-        while True:
-            try:
-                faculty_details.append(pickle.load(fi_fac))
-            except EOFError:
-                break
+    faculty_details = load_faculty()
     for fc in faculty_details:
         print('Faculty Name : ' + fc.ename)
         print('Faculty ID : ' + fc.eid)
@@ -449,15 +362,7 @@ def print_faculty_details():
 
 
 def print_book_details():
-
-    book_details = []
-    with open('books_data.pkl', 'rb') as fi_bk:
-        while True:
-            try:
-                book_details.append(pickle.load(fi_bk))
-            except EOFError:
-                break
-
+    book_details = load_books()
     for bk in book_details:
         print('Title : ' + bk.title)
         print('Author : ' + bk.author)
@@ -570,8 +475,3 @@ def return_book_student():
     else:
         print('Student not present in database. Error.')
 
-# search book functions - minor
-# archive 4+ year students - will do this in main script before running init function
-# eg : if __name__ == __main__ ==> archive_students()
-# Add exception handling if time allows
-# pls refactor code :'(((( not DRY at all, shitty as fuck code
