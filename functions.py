@@ -70,14 +70,7 @@ def search_book(mode, data):
 
 def modify_std_on_return(book_isbn, roll):
     # load student data
-    curr_students = []
-    with open('student_data.pkl', 'rb') as f:
-        while True:
-            try:
-                curr_students.append(pickle.load(f))
-            except EOFError:
-                break
-
+    curr_students = load_student()
     # modify student
     for st in curr_students:
         if st.roll_no == roll:
@@ -528,4 +521,32 @@ def return_book_student():
 
 def archive():
     # function archives all students who have passed out
-    pass
+    # load student data
+    print('Archiving students...')
+    curr_std = load_student()
+    # search for students whose year of admission is 4+ years before than current year
+    for std in curr_std:
+        diff = datetime.datetime.now().year - int(std.year_of_admn)
+        if diff > 4:
+            print(f'Archiving {std.name} with roll no {std.roll_no}..')
+            # return their books (loop possibly?)
+            for bk in std.books_issued:
+                modify_book(bk['isbn'], 1, 1)
+            # since his books have been returned remove his book data
+            std.books_issued.clear()
+            std.num_books_issued = 0
+            # move this students detail to a new file named archived
+            with open('archived_students.pkl', 'ab') as file:
+                pickle.dump(std, file)
+            # after moving remove from current student data, and update curr student data file
+            curr_std.remove(std)
+            print(f'{std.name} with roll no {std.roll_no} has been archived and moved to archived database.')
+
+    for i in range(0, len(curr_std)):
+        if i == 0:
+            with open('student_data.pkl', 'wb') as f:
+                pickle.dump(curr_std[i], f)
+        else:
+            with open('student_data.pkl', 'ab') as f:
+                pickle.dump(curr_std[i], f)
+    print('Archiving completed.')

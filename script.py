@@ -1,5 +1,5 @@
-from functions import add_book, add_faculty, add_student, issue_book_facutly, issue_book_student, return_book_facutly, \
-    return_book_student, print_student_details, print_faculty_details, print_book_details, search_book
+from functions import add_book, add_faculty, add_student, issue_book_facutly, issue_book_student, return_book_facutly,\
+    return_book_student, print_student_details, print_faculty_details, print_book_details, search_book, archive
 
 
 def show_menu():
@@ -108,6 +108,7 @@ def main():
 
 
 if __name__ == "__main__":
+    archive()
     main()
 
 
