@@ -1,5 +1,5 @@
 from functions import add_book, add_faculty, add_student, issue_book_facutly, issue_book_student, return_book_facutly, \
-    return_book_student, print_student_details, print_faculty_details, print_book_details
+    return_book_student, print_student_details, print_faculty_details, print_book_details, search_book
 
 
 def show_menu():
@@ -24,9 +24,9 @@ def show_menu():
 
 
 def show_search_menu():
-    print('1. Search book by title.')
-    print('2. Search book by author.')
-    print('3. Search book by ISBN(13).')
+    print('1. Search book by ISBN(13).')
+    print('2. Search book by title.')
+    print('3. Search book by author.')
 
 
 def get_choice():
@@ -44,39 +44,66 @@ def main():
     while choice != -1:
         if choice == 1:
             add_student()
+            show_menu()
         elif choice == 2:
             add_faculty()
+            show_menu()
         elif choice == 3:
             add_book()
+            show_menu()
         elif choice == 4:
             issue_book_student()
+            show_menu()
         elif choice == 5:
             issue_book_facutly()
+            show_menu()
         elif choice == 6:
             return_book_student()
+            show_menu()
         elif choice == 7:
             return_book_facutly()
+            show_menu()
         elif choice == 8:
-            show_search_menu()
+            show_menu()
             src_choice = get_search_choice()
             while src_choice != -1:
                 if src_choice == 1:
-                    pass
+                    try:
+                        data = int(input('Enter ISBN-13: '))
+                    except ValueError:
+                        print('Invalid Input, Enter A number.')
+                    else:
+                        search_book('i', data)
                 elif src_choice == 2:
-                    pass
+                    try:
+                        data = input('Enter Title of book: ')
+                    except ValueError:
+                        print('Invalid Input.')
+                    else:
+                        search_book('t', data)
                 elif src_choice == 3:
-                    pass
+                    try:
+                        data = input('Enter Author Name: ')
+                    except ValueError:
+                        print('Invalid Input.')
+                    else:
+                        search_book('a', data)
                 else:
                     print('Invalid Input. Try again.')
-                    src_choice = get_search_choice()
+                show_search_menu()
+                src_choice = get_search_choice()
         elif choice == 9:
             print_student_details()
+            show_menu()
         elif choice == 10:
             print_faculty_details()
+            show_menu()
         elif choice == 11:
             print_book_details()
+            show_menu()
         else:
             print('Invalid Choice, Enter Choice Again.')
+            show_menu()
         choice = get_choice()
 
 

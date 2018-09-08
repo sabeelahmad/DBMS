@@ -43,6 +43,31 @@ def load_books():
     return get_books
 
 
+def search_book(mode, data):
+    books = load_books()
+    if mode == 'i':
+        # isbn search
+        for bk in books:
+            if bk.isbn == data:
+                print(f'Book details are: \n Author: {bk.author} \n Title: {bk.title} \n Copies Available: {bk.num_copies}')
+                return
+        print('Book not available.')
+    elif mode == 't':
+        # title search
+        for bk in books:
+            if bk.title.lower() == data.lower():
+                print(f'Book details are: \n Author: {bk.author} \n Title: {bk.title} \n Copies Available: {bk.num_copies}')
+                return
+        print('Book not available.')
+    elif mode == 'a':
+        # search using author
+        for bk in books:
+            if bk.author.lower() == data.lower():
+                print(f'Book details are: \n Author: {bk.author} \n Title: {bk.title} \n Copies Available: {bk.num_copies}')
+                return
+        print('Book not available.')
+
+
 def modify_std_on_return(book_isbn, roll):
     # load student data
     curr_students = []
