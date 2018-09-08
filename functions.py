@@ -250,18 +250,27 @@ def std_present(std_roll):
 
 def add_faculty():
     # ask input from user
-    ename = input('Enter faculty name: ')
-    eid = input('Enter faculty id (5 digits): ')
-    if check_if_eid_present(eid):
-        print('Faculty with this eid already exists. Cannot add Faculty.')
-        return
-    # create faculty using constructor
-    f = faculty.FacultyClass(ename, eid)
-    # add created faculty to list
-    faculty.faculty_list.append(f)
-    with open('faculty_data.pkl', 'ab') as fi_fac:
-        # dumping data into file
-        pickle.dump(f, fi_fac)
+    try:
+        ename = input('Enter faculty name: ')
+        while True:
+            eid = input('Enter faculty id (5 digits): ')
+            if len(eid) != 5:
+                print('eid has to be 5 digits long, try again.')
+            else:
+                break
+    except ValueError:
+        print('Invalid Input')
+    else:
+        if check_if_eid_present(eid):
+            print('Faculty with this eid already exists. Cannot add Faculty.')
+            return
+        # create faculty using constructor
+        f = faculty.FacultyClass(ename, eid)
+        # add created faculty to list
+        faculty.faculty_list.append(f)
+        with open('faculty_data.pkl', 'ab') as fi_fac:
+            # dumping data into file
+            pickle.dump(f, fi_fac)
 
 
 def add_student():
@@ -275,55 +284,81 @@ def add_student():
         'ME': 'ME',
         'BT': 'BT'
     }
-    name = input('Enter name of Student: ')
-    year_of_admn = input('Enter Year of Admission of Student: ')
-    branch = input('Enter branch of student: ')
-    admn_id_no = input('Enter Admission ID: ')
-    std_roll = year_of_admn + 'U' + branch_roll_mapping[branch] + admn_id_no
-    if std_present(std_roll):
-        print('A student with the same details already exists. Cannot Add Student.')
+    try:
+        name = input('Enter name of Student: ')
+        while True:
+            year_of_admn = input('Enter Year of Admission of Student: ')
+            if int(year_of_admn) > datetime.datetime.now().year:
+                print(f'Year of admission cannot be greater than {datetime.datetime.now().year}')
+            else:
+                break
+        branch = input('Enter branch of student: ')
+        while True:
+            admn_id_no = input('Enter Admission ID (4 digits): ')
+            if len(admn_id_no) != 4:
+                print('Admission ID has to be 4 digits long.')
+            else:
+                break
+        std_roll = year_of_admn + 'U' + branch_roll_mapping[branch] + admn_id_no
+    except ValueError:
+        print('Invalid Input. Try again')
+        return
     else:
-        # Now creating student using all the details that the user will enter
-        s = student.StudentClass(name, year_of_admn, branch, admn_id_no)
-        # add created student to list
-        student.student_list.append(s)
-        with open('student_data.pkl', 'ab') as fi_std:
-            # dumping data
-            pickle.dump(s, fi_std)
+        if std_present(std_roll):
+            print('A student with the same details already exists. Cannot Add Student.')
+        else:
+            # Now creating student using all the details that the user will enter
+            s = student.StudentClass(name, year_of_admn, branch, admn_id_no)
+            # add created student to list
+            student.student_list.append(s)
+            with open('student_data.pkl', 'ab') as fi_std:
+                # dumping data
+                pickle.dump(s, fi_std)
 
 
 def add_book():
     # ask for parameters of a book from user
-    title = input('Enter Book Title: ')
-    author = input('Enter Name of Author: ')
-    isbn = int(input('Enter Book ISBN: '))
-    num_copies_to_add = int(input('Enter number of copies of this book to be added: '))
-    if check_if_isbn_present(isbn):
-        print('Book with same ISBN and title already exists, Book details have been updated')
-        get_books = load_books()
-        for i in range(0, len(get_books)):
-            if get_books[i].isbn == isbn:
-                cp = get_books[i].num_copies
-                get_books.pop(i)
-                bk_new = book.BookClass(title, author, isbn, num_copies_to_add + cp)
-                book.book_list.append(bk_new)
-            for j in range(0, len(book.book_list)):
-                if j == 0:
-                    with open('books_data.pkl', 'wb') as fi_bk:
-                        pickle.dump(book.book_list[j], fi_bk)
-                else:
-                    with open('books_data.pkl', 'ab') as fi_bk:
-                        pickle.dump(book.book_list[j], fi_bk)
+    try:
+        title = input('Enter Book Title: ')
+        author = input('Enter Name of Author: ')
+        while True:
+            isbn = int(input('Enter Book ISBN (13 digit ISBN is followed by this library): '))
+            check_isbn = str(isbn)
+            if len(check_isbn) == 13:
+                break
+            else:
+                print('Length of ISBN has to be 13. Try again.')
+        num_copies_to_add = int(input('Enter number of copies of this book to be added: '))
+    except ValueError:
+        print('Invalid Input, ISBN/Number of copies has to be a number. Try again.')
+        return
     else:
-        # calling book constructor
-        bk_new = book.BookClass(title, author, isbn, num_copies_to_add)
-        #  add new book to list of books
-        book.book_list.append(bk_new)
-        # pickle book
-        with open('books_data.pkl', 'ab') as fi_bk:
+        if check_if_isbn_present(isbn):
+            print('Book with same ISBN and title already exists, Book details have been updated')
+            get_books = load_books()
+            for i in range(0, len(get_books)):
+                if get_books[i].isbn == isbn:
+                    cp = get_books[i].num_copies
+                    get_books.pop(i)
+                    bk_new = book.BookClass(title, author, isbn, num_copies_to_add + cp)
+                    book.book_list.append(bk_new)
+                for j in range(0, len(book.book_list)):
+                    if j == 0:
+                        with open('books_data.pkl', 'wb') as fi_bk:
+                            pickle.dump(book.book_list[j], fi_bk)
+                    else:
+                        with open('books_data.pkl', 'ab') as fi_bk:
+                            pickle.dump(book.book_list[j], fi_bk)
+        else:
+            # calling book constructor
+            bk_new = book.BookClass(title, author, isbn, num_copies_to_add)
+            #  add new book to list of books
+            book.book_list.append(bk_new)
+            # pickle book
+            with open('books_data.pkl', 'ab') as fi_bk:
 
-            # dump
-            pickle.dump(bk_new, fi_bk)
+                # dump
+                pickle.dump(bk_new, fi_bk)
 
     print('Book details updated in system..')
 

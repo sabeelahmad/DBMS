@@ -23,8 +23,18 @@ def show_menu():
     print('-'*35)
 
 
+def show_search_menu():
+    print('1. Search book by title.')
+    print('2. Search book by author.')
+    print('3. Search book by ISBN(13).')
+
+
 def get_choice():
     return int(input('Enter the choice(1-11) of operation you want to perform OR Press -1 to exit: '))
+
+
+def get_search_choice():
+    return int(input('Enter the choice(1-3) OR Press -1 to exit: '))
 
 
 def main():
@@ -47,7 +57,18 @@ def main():
         elif choice == 7:
             return_book_facutly()
         elif choice == 8:
-            pass
+            show_search_menu()
+            src_choice = get_search_choice()
+            while src_choice != -1:
+                if src_choice == 1:
+                    pass
+                elif src_choice == 2:
+                    pass
+                elif src_choice == 3:
+                    pass
+                else:
+                    print('Invalid Input. Try again.')
+                    src_choice = get_search_choice()
         elif choice == 9:
             print_student_details()
         elif choice == 10:
