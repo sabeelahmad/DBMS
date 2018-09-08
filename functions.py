@@ -43,6 +43,26 @@ def load_books():
     return get_books
 
 
+def dump_students(curr_students):
+    for i in range(0, len(curr_students)):
+        if i == 0:
+            with open('student_data.pkl', 'wb') as f:
+                pickle.dump(curr_students[i], f)
+        else:
+            with open('student_data.pkl', 'ab') as f:
+                pickle.dump(curr_students[i], f)
+
+
+def dump_faculty(curr_emps):
+    for i in range(0, len(curr_emps)):
+        if i == 0:
+            with open('faculty_data.pkl', 'wb') as f:
+                pickle.dump(curr_emps[i], f)
+        else:
+            with open('faculty_data.pkl', 'rb') as f:
+                pickle.dump(curr_emps[i], f)
+
+
 def search_book(mode, data):
     books = load_books()
     if mode == 'i':
@@ -80,13 +100,7 @@ def modify_std_on_return(book_isbn, roll):
                     st.books_issued.remove(bk)
 
     # replace old file data with new
-    for i in range(0, len(curr_students)):
-        if i == 0:
-            with open('student_data.pkl', 'wb') as f:
-                pickle.dump(curr_students[i], f)
-        else:
-            with open('student_data.pkl', 'ab') as f:
-                pickle.dump(curr_students[i], f)
+    dump_students(curr_students)
 
 
 def calc_fine(roll, book_isbn):
@@ -125,14 +139,7 @@ def modify_faculty_on_return(book_isbn, emp_id):
                     e.books_issued.remove(bk)
 
     # dump modified data
-    for i in range(0, len(curr_emps)):
-        if i == 0:
-            with open('faculty_data.pkl', 'wb') as f:
-                pickle.dump(curr_emps[i], f)
-        else:
-            with open('faculty_data.pkl', 'rb') as f:
-                pickle.dump(curr_emps[i], f)
-
+    dump_faculty(curr_emps)
     return nc
 
 
@@ -163,13 +170,7 @@ def modify_faculty(emp_id, issued):
             fac.books_issued.append(issued)
             break
     # dump updated data to faculty pkl file
-    for j in range(0, len(curr_emps)):
-        if j == 0:
-            with open('faculty_data.pkl', 'wb') as fi_fac:
-                pickle.dump(curr_emps[j], fi_fac)
-        else:
-            with open('faculty_data.pkl', 'ab') as fi_fac:
-                pickle.dump(curr_emps[j], fi_fac)
+    dump_faculty(curr_emps)
 
 
 def modify_book(isbn, num_copies=1, mode=0):
@@ -212,13 +213,7 @@ def modify_student(std_roll, bk_issued):
             std.books_issued.append(bk_issued)
             std.num_books_issued += 1
     # overwrite file with new data
-    for i in range(0, len(curr_students)):
-        if i == 0:
-            with open('student_data.pkl', 'wb') as fs:
-                pickle.dump(curr_students[i], fs)
-        else:
-            with open('student_data.pkl', 'ab') as fs:
-                pickle.dump(curr_students[i], fs)
+    dump_students(curr_students)
 
 
 def check_available(isbn, std_roll):
@@ -542,11 +537,5 @@ def archive():
             curr_std.remove(std)
             print(f'{std.name} with roll no {std.roll_no} has been archived and moved to archived database.')
 
-    for i in range(0, len(curr_std)):
-        if i == 0:
-            with open('student_data.pkl', 'wb') as f:
-                pickle.dump(curr_std[i], f)
-        else:
-            with open('student_data.pkl', 'ab') as f:
-                pickle.dump(curr_std[i], f)
+    dump_students(curr_std)
     print('Archiving completed.')

@@ -64,8 +64,13 @@ def main():
             return_book_facutly()
             show_menu()
         elif choice == 8:
-            show_menu()
-            src_choice = get_search_choice()
+            show_search_menu()
+            while True:
+                try:
+                    src_choice = get_search_choice()
+                    break
+                except ValueError:
+                    print('Invalid Input. Try again.')
             while src_choice != -1:
                 if src_choice == 1:
                     try:
