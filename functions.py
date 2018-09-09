@@ -69,23 +69,24 @@ def search_book(mode, data):
         # isbn search
         for bk in books:
             if bk.isbn == data:
-                print(f'Book details are: \n Author: {bk.author} \n Title: {bk.title} \n Copies Available: {bk.num_copies}')
-                return
+                print(f'Book details are: \nAuthor: {bk.author} \nTitle: {bk.title} \nCopies Available: {bk.num_copies}')
         print('Book not available.')
     elif mode == 't':
         # title search
         for bk in books:
             if bk.title.lower() == data.lower():
-                print(f'Book details are: \n Author: {bk.author} \n Title: {bk.title} \n Copies Available: {bk.num_copies}')
+                print(f'Book details are: \nAuthor: {bk.author} \nTitle: {bk.title} \nCopies Available: {bk.num_copies}')
                 return
         print('Book not available.')
     elif mode == 'a':
         # search using author
+        flag = 0
         for bk in books:
             if bk.author.lower() == data.lower():
-                print(f'Book details are: \n Author: {bk.author} \n Title: {bk.title} \n Copies Available: {bk.num_copies}')
-                return
-        print('Book not available.')
+                print(f'Book details are: \nAuthor: {bk.author} \nTitle: {bk.title} \nCopies Available: {bk.num_copies}')
+                flag = 1
+        if flag == 0:
+            print('Book not available.')
 
 
 def modify_std_on_return(book_isbn, roll):
