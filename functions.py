@@ -69,13 +69,13 @@ def search_book(mode, data):
         # isbn search
         for bk in books:
             if bk.isbn == data:
-                print(f'Book details are: \nAuthor: {bk.author} \nTitle: {bk.title} \nCopies Available: {bk.num_copies}')
+                print(f'Book details are: \nAuthor:{bk.author}\nTitle:{bk.title}\nCopies Available:{bk.num_copies}')
         print('Book not available.')
     elif mode == 't':
         # title search
         for bk in books:
             if bk.title.lower() == data.lower():
-                print(f'Book details are: \nAuthor: {bk.author} \nTitle: {bk.title} \nCopies Available: {bk.num_copies}')
+                print(f'Book details are: \nAuthor:{bk.author}\nTitle:{bk.title}\nCopies Available:{bk.num_copies}')
                 return
         print('Book not available.')
     elif mode == 'a':
@@ -83,7 +83,7 @@ def search_book(mode, data):
         flag = 0
         for bk in books:
             if bk.author.lower() == data.lower():
-                print(f'Book details are: \nAuthor: {bk.author} \nTitle: {bk.title} \nCopies Available: {bk.num_copies}')
+                print(f'Book details are: \nAuthor:{bk.author}\nTitle:{bk.title}\nCopies Available:{bk.num_copies}')
                 flag = 1
         if flag == 0:
             print('Book not available.')
@@ -117,12 +117,11 @@ def calc_fine(roll, book_isbn):
                     doi = bk['doi']
                     dor = datetime.datetime.now()
                     break
-
     # check for fine
     diff_days = dor - doi
     if diff_days.days > 14:
         fine = 2 * (diff_days.days - 14)
-        print(f'Fine amount payable is : {fine}')
+        print(f'Fine amount payable is : Rs.{fine}')
     else:
         print('Thank you for returning the book within the stipulated time.')
 
@@ -138,7 +137,6 @@ def modify_faculty_on_return(book_isbn, emp_id):
                 if bk['isbn'] == book_isbn:
                     nc = bk['nc']
                     e.books_issued.remove(bk)
-
     # dump modified data
     dump_faculty(curr_emps)
     return nc
@@ -185,7 +183,6 @@ def modify_book(isbn, num_copies=1, mode=0):
             break
         if get_books[i].isbn == isbn and mode == 1:
             get_books[i].num_copies += num_copies
-
     # rewrite data
     for j in range(0, len(get_books)):
         if j == 0:
@@ -314,7 +311,7 @@ def add_student():
             else:
                 break
         std_roll = year_of_admn + 'U' + branch_roll_mapping[branch] + admn_id_no
-    except ValueError:
+    except ValueError and KeyError:
         print('Invalid Input. Try again')
         return
     else:
@@ -328,6 +325,7 @@ def add_student():
             with open('student_data.pkl', 'ab') as fi_std:
                 # dumping data
                 pickle.dump(s, fi_std)
+            print(f'Student with name {name} and roll no {std_roll} has been created.')
 
 
 def add_book():
@@ -373,7 +371,6 @@ def add_book():
 
                 # dump
                 pickle.dump(bk_new, fi_bk)
-
     print('Book details updated in system..')
 
 
@@ -537,6 +534,7 @@ def archive():
             # after moving remove from current student data, and update curr student data file
             curr_std.remove(std)
             print(f'{std.name} with roll no {std.roll_no} has been archived and moved to archived database.')
-
     dump_students(curr_std)
     print('Archiving completed.')
+
+# PROJECT CREATED BY : SABEEL AHMAD
