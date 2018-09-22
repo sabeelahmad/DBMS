@@ -1,0 +1,35 @@
+Title : Kite Runner
+Author : Khalid Hosseini
+ISBN 9781594631931
+Copies available are : 9
+
+Title : Microelectronic Circuits
+Author : Adel S. Sedra - Kenneth C. Smith
+ISBN 9780199339136
+Copies available are : 10
+
+Title : Database System Concepts
+Author : Henry F. Korth
+ISBN 9780073523323
+Copies available are : 15
+
+Title : Computer System Architecture
+Author : Morris Mano
+ISBN 9780131755635
+Copies available are : 8
+
+Title : Digital Design
+Author : Morris Mano
+ISBN 9780131989245
+Copies available are : 12
+
+Title : Let Us C
+Author : Yashavant Kanetkar
+ISBN 9788183331630
+Copies available are : 25
+
+Title : C Programming Language
+Author : Dennis Ritchie
+ISBN 9780131103627
+Copies available are : 40
+

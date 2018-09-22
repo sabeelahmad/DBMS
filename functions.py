@@ -70,6 +70,7 @@ def search_book(mode, data):
         for bk in books:
             if bk.isbn == data:
                 print(f'Book details are: \nAuthor:{bk.author}\nTitle:{bk.title}\nCopies Available:{bk.num_copies}')
+                return
         print('Book not available.')
     elif mode == 't':
         # title search
@@ -384,6 +385,7 @@ def print_student_details():
         for bk in st.books_issued:
             print(f"Book ISBN : {bk['isbn']}")
             print(f"Date Of Issue : {bk['doi']}")
+        print('-'*25)
 
 
 def print_faculty_details():
@@ -395,6 +397,7 @@ def print_faculty_details():
             print(f"Book ISBN : {bk['isbn']}")
             print(f"Date Of Issue : {bk['doi']}")
             print(f"{bk['nc']} copies of book having ISBN {bk['isbn']}")
+            print('*'*25)
 
 
 def print_book_details():
@@ -404,6 +407,7 @@ def print_book_details():
         print('Author : ' + bk.author)
         print(f'ISBN {bk.isbn}')
         print(f'Copies available are : {bk.num_copies}')
+        print('-'*25)
 
 
 def issue_book_student():
