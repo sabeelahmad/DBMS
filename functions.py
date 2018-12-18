@@ -7,6 +7,65 @@ import pickle
 import datetime
 
 
+def modify_std_on_return(book_isbn, roll):
+    # load student data
+    curr_students = []
+    with open('student_data.pkl', 'rb') as f:
+        while True:
+            try:
+                curr_students.append(pickle.load(f))
+            except EOFError:
+                break
+
+    # modify student
+    for st in curr_students:
+        if st.roll_no == roll:
+            for bk in st.books_issued:
+                if bk['isbn'] == book_isbn:
+                    st.num_books_issued -= 1
+                    st.books_issued.remove(bk)
+
+    # replace old file data with new
+    for i in range(0, len(curr_students)):
+        if i == 0:
+            with open('student_data.pkl', 'wb') as f:
+                pickle.dump(curr_students[i], f)
+        else:
+            with open('student_data.pkl', 'ab') as f:
+                pickle.dump(curr_students[i], f)
+
+
+def calc_fine(roll, book_isbn):
+    # load std data
+    curr_students = []
+    with open('student_data.pkl', 'rb') as f:
+        while True:
+            try:
+                curr_students.append(pickle.load(f))
+            except EOFError:
+                break
+
+    # search for student with given roll and issued isbn
+    dor = 0
+    doi = 0
+    for s in curr_students:
+        if s.roll_no == roll:
+            for bk in s.books_issued:
+                if bk['isbn'] == book_isbn:
+                    # get doi and calc dor using datetime module
+                    doi = bk['doi']
+                    dor = datetime.datetime.now()
+                    break
+
+    # check for fine
+    diff_days = dor - doi
+    if diff_days.days > 14:
+        fine = 2 * (diff_days.days - 14)
+        print(f'Fine amount payable is : {fine}')
+    else:
+        print('Thank you for returning the book within the stipulated time.')
+
+
 def modify_faculty_on_return(book_isbn, emp_id):
     # load faculty data
     curr_emps = []
@@ -27,7 +86,7 @@ def modify_faculty_on_return(book_isbn, emp_id):
                     nc = bk['nc']
                     e.books_issued.remove(bk)
 
-    # dump modified data => not sure if this will work or not
+    # dump modified data
     for i in range(0, len(curr_emps)):
         if i == 0:
             with open('faculty_data.pkl', 'wb') as f:
@@ -491,14 +550,25 @@ def return_book_facutly():
 
 def return_book_student():
     # ask for roll no
+    std_roll = input('Enter Student Roll No Who Is Returning The Book: ')
     # if present
+    if std_present(std_roll):
         # ask for book isbn
+        book_isbn = int(input('Enter Book ISBN To Be Returned: '))
         # check if it was issued to this roll no at all or not
-            # since book was issued, take date from system
-            # calc fine
+        if not check_if_already_issued_to_student(book_isbn, std_roll):
+            # since book was issued
+            # calc fine, if applied
+            calc_fine(std_roll, book_isbn)
             # book returned => modify student details and modify book details
+            modify_book(book_isbn, 1, 1)
+            modify_std_on_return(book_isbn, std_roll)
         # else exit
+        else:
+            print(f'Book with ISBN: {book_isbn} has not been issued to this student.')
     # else exit
+    else:
+        print('Student not present in database. Error.')
 
 # search book functions - minor
 # return book by student
