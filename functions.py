@@ -571,15 +571,7 @@ def return_book_student():
         print('Student not present in database. Error.')
 
 # search book functions - minor
-# return book by student
-
-# fine calculation
-
 # archive 4+ year students - will do this in main script before running init function
 # eg : if __name__ == __main__ ==> archive_students()
-
-
 # Add exception handling if time allows
-
-
 # pls refactor code :'(((( not DRY at all, shitty as fuck code
